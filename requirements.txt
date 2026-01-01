@@ -1,0 +1,17 @@
+fastapi
+langchain
+langchain-google-genai
+langgraph
+langmem
+google-generativeai
+joblib
+numpy
+pandas
+pydantic
+python-dotenv
+requests
+scikit-learn
+tensorflow-cpu
+typing_extensions
+uvicorn
+supabase
