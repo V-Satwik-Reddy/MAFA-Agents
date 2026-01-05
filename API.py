@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from execution_agent import run_execute_agent
-from general_agent import run_general_agent
-from market_search_agent import run_market_research_agent
+from agents.execution_agent import run_execute_agent  # type: ignore
+from agents.general_agent import run_general_agent  # type: ignore
+from agents.market_search_agent import run_market_research_agent  # type: i
 from http_client import set_request_token
 import random
 app = FastAPI(title="Execution Agent API")

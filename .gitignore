@@ -1,5 +1,7 @@
 /__pycache__/
 /lstm/__pycache__/
 /tools/__pycache__/
+/agents/__pycache__/
 venv/
 /.env
+/executionagentfinal.py
