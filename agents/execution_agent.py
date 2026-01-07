@@ -15,17 +15,9 @@ from tools.memory_tools import (
 from vectordbsupabase import SupabaseVectorDB
 
 load_dotenv()
-
 google_api_key = os.getenv("GOOGLE_API_KEY")
-if not google_api_key:
-    raise RuntimeError("Missing GOOGLE_API_KEY environment variable")
-os.environ["GOOGLE_API_KEY"] = google_api_key
-
 model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
-
-# Shared vector DB for persistent chat memory
 vector_db = SupabaseVectorDB()
-
 
 tools = [
     get_user_balance,
@@ -61,6 +53,11 @@ Style
 - Be concise and directive. Use short paragraphs or bullets. Avoid over-explaining.
 """
 
+agent= create_agent(
+    model=model,
+    tools=tools,
+    system_prompt=BASE_SYSTEM_PROMPT
+)
 
 def build_system_message(user_id: int, user_message: str) -> str | None:
     """Fetch recent context from Supabase memory for this user/agent."""
@@ -88,12 +85,6 @@ def build_system_message(user_id: int, user_message: str) -> str | None:
         for row in rows
     )
     return "Recent conversation history:\n" + history
-
-agent= create_agent(
-    model=model,
-    tools=tools,
-    system_prompt=BASE_SYSTEM_PROMPT
-)
 
 def run_execute_agent(user_message: str, user_id: int) -> str:
     print(f"\n{'='*60}")
