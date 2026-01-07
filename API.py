@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from agents.execution_agent import run_execute_agent  # type: ignore
 from agents.general_agent import run_general_agent  # type: ignore
 from agents.market_search_agent import run_market_research_agent  # type: i
+from agents.portfolio_manager_agent import run_portfolio_manager_agent  # type: ignore
 from http_client import set_request_token
 import random
 app = FastAPI(title="Execution Agent API")
@@ -69,20 +70,18 @@ def general_agent_endpoint(payload: ExecuteAgentRequest, authorization: str | No
 	finally:
 		set_request_token(None)
   
-@app.post("/agenttest")
-def agent_test_endpoint():
-	"""Simple test endpoint to verify the API is working."""
-	res=[{
-  "agentResponse": "Ready to execute trades for MSFT.",
-  "useTool": "execute",
-  "toolData": { "symbol": "MSFT" }},{
-  "agentResponse": "Here is the chart for AAPL.",
-  "useTool": "graph",
-  "toolData": { "symbol": "AAPL" }
-},{
-  "agentResponse": "Showing your TSLA transaction history.",
-  "useTool": "transactions",
-  "toolData": { "symbol": "TSLA" }
-}]
-	i=random.randint(0,len(res)-1)
-	return res[i]
+@app.post("/portfolio-manager-agent")
+def portfolio_manager_agent_endpoint(payload: ExecuteAgentRequest, authorization: str | None = Header(default=None)):
+	"""HTTP endpoint that runs the portfolio manager agent and returns its reply."""
+	if not authorization or not authorization.lower().startswith("bearer "):
+		raise HTTPException(status_code=401, detail="Missing or invalid Authorization header")
+	token = authorization.split(" ", 1)[1]
+	try:
+		set_request_token(token)
+		result = run_portfolio_manager_agent(user_message=payload.query, user_id=payload.userId)
+		return {"data": result, "userId": payload.userId}
+	except Exception as exc:  # pragma: no cover - simple passthrough
+		print("Error executing agent:", exc)
+		raise HTTPException(status_code=500, detail="Failed to execute agent") from exc
+	finally:
+		set_request_token(None)
