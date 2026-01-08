@@ -7,8 +7,8 @@ from tools.profile_tools import get_user_holdings, get_current_stock_price
 from tools.memory_tools import (
     retrieve_user_context,
     store_user_context,
-    search_user_memory_portfolio as search_user_memory,
-    store_user_note_portfolio as store_user_note,
+    search_user_memory_general as search_user_memory,
+    store_user_note_general as store_user_note,
 )
 from vectordbsupabase import SupabaseVectorDB
 
@@ -31,7 +31,7 @@ BASE_SYSTEM_PROMPT="""
 agent = create_agent(
     tools=tools,
     model=model,
-    system_message=BASE_SYSTEM_PROMPT,
+    system_prompt=BASE_SYSTEM_PROMPT,
 )
 
 def build_system_message(user_id: int, user_message: str) -> str | None:

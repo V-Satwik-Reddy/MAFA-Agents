@@ -81,7 +81,7 @@ def _render_rows(rows: List[Dict[str, Any]]) -> str:
 
 
 @tool
-def search_user_memory_general(query: str, user_id: str) -> str:
+def search_user_memory(query: str, user_id: str) -> str:
     """Search recent Supabase memory for this user (shared across agents)."""
     try:
         emb = vector_db.embed_text(query)
@@ -98,7 +98,7 @@ def search_user_memory_general(query: str, user_id: str) -> str:
 
 
 @tool
-def store_user_note_general(note: str, user_id: str) -> str:
+def store_user_note(note: str, user_id: str) -> str:
     """Store a short note to shared Supabase memory."""
     try:
         store_user_context(
@@ -111,66 +111,3 @@ def store_user_note_general(note: str, user_id: str) -> str:
     except Exception as exc:
         return f"Could not save memory: {exc}"
 
-
-@tool
-def search_user_memory_execution(query: str, user_id: str) -> str:
-    """Search recent Supabase memory for this user (shared across agents)."""
-    try:
-        emb = vector_db.embed_text(query)
-        rows = retrieve_user_context(
-            user_id=str(user_id),
-            agent=SHARED_AGENT_NAME,
-            query_embedding=emb,
-            top_k=5,
-            min_score=0.25,
-        )
-    except Exception as exc:
-        return f"Memory search unavailable: {exc}"
-    return _render_rows(rows)
-
-
-@tool
-def store_user_note_execution(note: str, user_id: str) -> str:
-    """Store a short note to shared Supabase memory."""
-    try:
-        store_user_context(
-            user_id=str(user_id),
-            agent="execution_agent",
-            content=note,
-            metadata={"user_message": note, "agent_response": "stored_note"},
-        )
-        return "Saved to memory."
-    except Exception as exc:
-        return f"Could not save memory: {exc}"
-
-
-@tool
-def search_user_memory_research(query: str, user_id: str) -> str:
-    """Search recent Supabase memory for this user (shared across agents)."""
-    try:
-        emb = vector_db.embed_text(query)
-        rows = retrieve_user_context(
-            user_id=str(user_id),
-            agent=SHARED_AGENT_NAME,
-            query_embedding=emb,
-            top_k=5,
-            min_score=0.25,
-        )
-    except Exception as exc:
-        return f"Memory search unavailable: {exc}"
-    return _render_rows(rows)
-
-
-@tool
-def store_user_note_research(note: str, user_id: str) -> str:
-    """Store a short note to shared Supabase memory."""
-    try:
-        store_user_context(
-            user_id=str(user_id),
-            agent="market_research_agent",
-            content=note,
-            metadata={"user_message": note, "agent_response": "stored_note"},
-        )
-        return "Saved to memory."
-    except Exception as exc:
-        return f"Could not save memory: {exc}"

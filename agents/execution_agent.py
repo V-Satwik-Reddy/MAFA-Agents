@@ -9,8 +9,8 @@ from tools.profile_tools import get_current_stock_price, get_user_balance, get_u
 from tools.memory_tools import (
     retrieve_user_context,
     store_user_context,
-    search_user_memory_execution as search_user_memory,
-    store_user_note_execution as store_user_note,
+    search_user_memory as search_user_memory,
+    store_user_note as store_user_note,
 )
 from vectordbsupabase import SupabaseVectorDB
 

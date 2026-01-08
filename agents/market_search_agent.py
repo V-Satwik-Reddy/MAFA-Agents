@@ -7,8 +7,8 @@ from tools.market_research_tools import predict, search_live_news
 from tools.memory_tools import (
     retrieve_user_context,
     store_user_context,
-    search_user_memory_research as search_user_memory,
-    store_user_note_research as store_user_note,
+    search_user_memory as search_user_memory,
+    store_user_note as store_user_note,
 )
 from vectordbsupabase import SupabaseVectorDB
 

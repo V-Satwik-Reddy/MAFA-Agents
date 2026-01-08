@@ -12,8 +12,8 @@ from tools.profile_tools import (
 from tools.memory_tools import (
     retrieve_user_context,
     store_user_context,
-    search_user_memory_general as search_user_memory,
-    store_user_note_general as store_user_note,
+    search_user_memory as search_user_memory,
+    store_user_note as store_user_note,
 )
 from vectordbsupabase import SupabaseVectorDB
 
